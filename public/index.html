@@ -45,5 +45,25 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <script src="index.js"></script>
+
+  <script>
+
+    (async function () {
+
+      console.log(navigator)
+
+      if ("serviceWorker" in navigator) {
+        try {
+          await navigator.serviceWorker.register("./service-worker.js", { scope: "/" })
+
+          console.log("Service Worker registered successfully.")
+        } catch (err) {
+          console.error(err)
+        }
+      }
+
+    })();
+
+  </script>
 </body>
 </html>

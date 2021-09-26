@@ -47,17 +47,6 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 })
 
-const cacheResponse = async (request) => {
-
-    const cache = await caches.open(RUNTIME);
-
-    const response = await fetch(request);
-
-    await cache.put(request, response.clone())
-
-    return response
-}
-
 self.addEventListener('fetch', (event) => {
 
     // If request is to another site, or not a GET request. Do not cache it and proceed with request.
@@ -69,18 +58,32 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // If the request is to our api then cache the response.
-    if (event.request.url.includes('/api')) {
+    const cacheResponse = async (request) => {
 
-        try {
-            event.respondWith( cacheResponse(event.request) )
-        } catch (err) {
-            console.error(err)
-            caches.match(event.request)
+        const cache = await caches.open(RUNTIME);
+    
+        const response = await fetch(request);
+    
+        await cache.put(request, response.clone())
+    
+        return response
+    }
+
+    const getCachedResponse = async (request) => {
+
+        return await caches.match(request);
+    }
+
+    const handleRequest = async (request) => {
+
+        const cachedResponse = getCachedResponse(request);
+
+        if (cachedResponse) {
+            return cachedResponse;
         }
-    };
 
-    return;
+        return cacheResponse(request)
+    }
 
-
+    event.respondWith( handleRequest(event.request) )
 })

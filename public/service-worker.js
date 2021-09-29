@@ -82,7 +82,9 @@ self.addEventListener('fetch', (event) => {
             return cachedResponse;
         }
 
-        return cacheResponse(request)
+        const response = cacheResponse(request);
+
+        return response;
     }
 
     event.respondWith( handleRequest(event.request) )

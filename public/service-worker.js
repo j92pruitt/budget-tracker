@@ -50,13 +50,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
 
     // If request is to another site, or not a GET request. Do not cache it and proceed with request.
-    // if (
-    //     event.request.method !== "GET" ||
-    //     !event.request.url.startsWith(self.location.origin)
-    // ) {
-    //     event.respondWith( fetch(event.request) );
-    //     return;
-    // }
+    if (
+        event.request.method !== "GET" ||
+        !event.request.url.startsWith(self.location.origin)
+    ) {
+        event.respondWith( fetch(event.request) );
+        return;
+    }
 
     const cacheResponse = async (request) => {
 
@@ -75,17 +75,14 @@ self.addEventListener('fetch', (event) => {
     }
 
     const handleRequest = async (request) => {
-        console.log('handle called')
 
         const cachedResponse = await getCachedResponse(request);
-        console.log(`cachedResponse is ${cachedResponse}`)
 
         if (cachedResponse) {
             return cachedResponse;
         }
 
         const response = await cacheResponse(request);
-        console.log(`response is ${response}`)
 
         return response;
     }

@@ -77,14 +77,14 @@ self.addEventListener('fetch', (event) => {
     const handleRequest = async (request) => {
         console.log('handle called')
 
-        const cachedResponse = getCachedResponse(request);
+        const cachedResponse = await getCachedResponse(request);
         console.log(`cachedResponse is ${cachedResponse}`)
 
         if (cachedResponse) {
             return cachedResponse;
         }
 
-        const response = cacheResponse(request);
+        const response = await cacheResponse(request);
         console.log(`response is ${response}`)
 
         return response;

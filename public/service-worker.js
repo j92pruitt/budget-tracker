@@ -50,13 +50,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
 
     // If request is to another site, or not a GET request. Do not cache it and proceed with request.
-    if (
-        event.request.method !== "GET" ||
-        !event.request.url.startsWith(self.location.origin)
-    ) {
-        event.respondWith( fetch(event.request) );
-        return;
-    }
+    // if (
+    //     event.request.method !== "GET" ||
+    //     !event.request.url.startsWith(self.location.origin)
+    // ) {
+    //     event.respondWith( fetch(event.request) );
+    //     return;
+    // }
 
     const cacheResponse = async (request) => {
 

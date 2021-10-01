@@ -76,15 +76,19 @@ self.addEventListener('fetch', (event) => {
 
     const handleRequest = async (request) => {
 
-        const cachedResponse = await getCachedResponse(request);
+        try {
 
-        if (cachedResponse) {
-            return cachedResponse;
+            const response = await cacheResponse(request);
+
+            return response;
+
+        } catch (err) {
+            const cachedResponse = await getCachedResponse(request);
+
+            if (cachedResponse) {
+                return cachedResponse;
+            }
         }
-
-        const response = await cacheResponse(request);
-
-        return response;
     }
 
     event.respondWith( handleRequest(event.request) )
